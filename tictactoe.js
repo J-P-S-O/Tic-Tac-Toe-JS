@@ -2,14 +2,20 @@ let prompt = require("prompt")
 let board = [['','',''],['','',''],['','','']];
 let net = require("net")
 let socket = require('socket')
+let me = undefined
+let adv = undefined
+const { EventEmitter } = require("events");
+
+const firstEmitter = new EventEmitter();
 let server = net.createServer((c) => {
     c.on('end', () => {
       console.log('client disconnected');
     });
     c.on('data', (data)=>{
         console.log(data)
+        firstEmitter.emit("got",data)
     })
-    server.on("send",(arg)=>{
+    firstEmitter.on("send",(arg)=>{
         c.write(arg.content)
     }) 
   });
@@ -66,15 +72,18 @@ function start(){
     console.log("Whats is the peer?None To wait")
     let peer = prompt.get()
     if (peer = "None"){
+        me = "X"
         server.listen(8090)
         console.log("Listening at 8090")
-
+        adv = "P"
     }else{
+        me = "P"
+        adv = "X"
         client.connect(8090, peer, function() {
             ErrCode = 0;
         });
         
-
+        
     }
 }
 function PersonInput(){
@@ -84,9 +93,22 @@ function PersonInput(){
     nput2 = prompt.get()
     board[nput][nput2] = "X"
 
-    check()
+    firstEmitter.emit("send",{content: outerinput})
     OutInput()
-
+    check()
 }
+async function OutInput(){
+    let outerinput = 0
+    client.on('data', function(data) {    
+        console.log('Client received: ' + data);
+         if (data.toString().endsWith('exit')) {
+           client.destroy();
+        }
+        outerinput = data.split("")
+        board[int(outerinput[0])][int(outerinput[1])] = adv
+PersonInput()
 
+    });
+    
+}
 start()
