@@ -5,19 +5,25 @@ let net = require("net")
 let me = undefined
 let adv = undefined
 const { EventEmitter } = require("events");
-
-
 const firstEmitter = new EventEmitter();
-
-let client = new net.Socket();
-client.on('data', function(data) {    
-    console.log('Client received: ' + data);
-     if (data.toString().endsWith('exit')) {
-       client.destroy();
-    }
-});
-
-function check() {
+let server = net.createServer((c) => {
+    firstEmitter.on("send",(arg)=>{
+        c.write(arg.content)
+    }) 
+    console.log("connecting"+c)
+    c.on('end', () => {
+      console.log('client disconnected');
+    });
+    c.on('data', (data)=>{
+        console.log(data)
+        firstEmitter.emit("got",data)
+    })
+    
+  });
+  server.on('error', (err) => {
+    throw err;
+  });
+  function check() {
     for (i in board) {
         
         if (board[i][0] == board[i][1] && board[i][2] == board[i][1]&&(board[i][0]!= '')) {
@@ -40,16 +46,6 @@ function check() {
 }
 
 
-
-function changeboard(x,y){
-    if (board[x][y]!=''){
-        console.log("Err.UsedOrNotOption")
-    }else{
-        board[x][y] = player
-    }
-    printBoard()
-}
-
 function printBoard(){
     for (i in board){
     console.log(board[i][0],board[i][1],board[i][2])
@@ -63,24 +59,21 @@ function end(){
 }
 function start(){
     console.log(board)
-    console.log("Whats is the peer?None To wait")
-    let peer = prompt()
-    if (peer == "None"){
+    console.log("Hello, listening at 8090")
+    
         me = "X"
         server.listen(8090)
         console.log("Listening at 8090")
-        adv = "P"
+        adv = "O"
+   PersonInput() 
+}
+function changeboard(x,y){
+    if (board[x][y]!=''){
+        console.log("Err.UsedOrNotOption")
     }else{
-        me = "P"
-        adv = "X"
-        console.log("connecting")
-        client.connect(8090, peer, function() {
-            ErrCode = 0;
-            console.log("connected")
-        });
-        
-        PersonInput()
+        board[x][y] = player
     }
+    printBoard()
 }
 function PersonInput(){
     console.log("Select Line, 0-2")
@@ -91,22 +84,10 @@ function PersonInput(){
     printBoard()
     firstEmitter.emit("send",{content: nput+nput2})
 
-    OutInput()
+    firstEmitter.on("got",(arg)=>{
+        changeboard(arg.split)
+    })
     check()
-}
-async function OutInput(){
-    let outerinput = 0
-    client.on('data', function(data) {    
-        console.log('Client received: ' + data);
-         if (data.toString().endsWith('exit')) {
-           client.destroy();
-        }
-        outerinput = data.split("")
-        board[int(outerinput[0])][int(outerinput[1])] = adv
-        printBoard()
-PersonInput()
 
-    });
-    
 }
 start()
