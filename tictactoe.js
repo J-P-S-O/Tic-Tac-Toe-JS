@@ -1,17 +1,22 @@
 let prompt = require("prompt-sync")()
 let board = [['','',''],['','',''],['','','']];
 let net = require("net")
-
+let waiting = false
 let me = undefined
 let adv = undefined
 const { EventEmitter } = require("events");
-
-
 const firstEmitter = new EventEmitter();
-
 let client = new net.Socket();
 client.on('data', function(data) {    
     console.log('Client received: ' + data);
+if (waiting){
+moves = data.split()
+board[moves[0]][moves[1]] = adv
+printBoard()
+check()
+PersonInput()
+
+}
      if (data.toString().endsWith('exit')) {
        client.destroy();
     }
@@ -63,24 +68,18 @@ function end(){
 }
 function start(){
     console.log(board)
-    console.log("Whats is the peer?None To wait")
+    console.log("Whats is the peer?")
     let peer = prompt()
-    if (peer == "None"){
-        me = "X"
-        server.listen(8090)
-        console.log("Listening at 8090")
-        adv = "P"
-    }else{
-        me = "P"
-        adv = "X"
-        console.log("connecting")
-        client.connect(8090, peer, function() {
+    me = "O"
+    adv = "X"
+    console.log("connecting")
+    client.connect(8090, peer, function() {
             ErrCode = 0;
             console.log("connected")
         });
         
-        PersonInput()
-    }
+    PersonInput()
+    
 }
 function PersonInput(){
     console.log("Select Line, 0-2")
@@ -89,24 +88,15 @@ function PersonInput(){
     nput2 = prompt()
     board[nput][nput2] = me
     printBoard()
-    firstEmitter.emit("send",{content: nput+nput2})
-
+    client.write(nput+nput2)
     OutInput()
     check()
 }
 async function OutInput(){
-    let outerinput = 0
-    client.on('data', function(data) {    
-        console.log('Client received: ' + data);
-         if (data.toString().endsWith('exit')) {
-           client.destroy();
-        }
-        outerinput = data.split("")
-        board[int(outerinput[0])][int(outerinput[1])] = adv
-        printBoard()
-PersonInput()
-
-    });
     
-}
+    let waiting = true
+    
+    };
+    
+
 start()

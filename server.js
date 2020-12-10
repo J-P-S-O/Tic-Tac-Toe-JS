@@ -1,23 +1,29 @@
 let prompt = require("prompt-sync")()
 let board = [['','',''],['','',''],['','','']];
 let net = require("net")
-
-let me = undefined
-let adv = undefined
+let me = "X"
+let adv = "O"
+let waiting = false
 const { EventEmitter } = require("events");
 const firstEmitter = new EventEmitter();
 let server = net.createServer((c) => {
+console.log(c)
     firstEmitter.on("send",(arg)=>{
         c.write(arg.content)
+	
+	
     }) 
     console.log("connecting"+c)
     c.on('end', () => {
       console.log('client disconnected');
     });
     c.on('data', (data)=>{
-        console.log(data)
-        firstEmitter.emit("got",data)
-    })
+        if (waiting){
+		changeboard((data.split(""))[0],(data.split(""))[1])
+waiting = false
+personinput()
+    
+}})
     
   });
   server.on('error', (err) => {
@@ -82,12 +88,10 @@ function PersonInput(){
     nput2 = prompt()
     board[nput][nput2] = me
     printBoard()
+check()
     firstEmitter.emit("send",{content: nput+nput2})
 
-    firstEmitter.on("got",(arg)=>{
-        changeboard(arg.split)
-    })
-    check()
+   waiting = true
 
 }
 start()
