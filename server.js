@@ -19,9 +19,10 @@ console.log(c)
     });
     c.on('data', (data)=>{
         if (waiting){
+data = data +'';
 		changeboard((data.split(""))[0],(data.split(""))[1])
 waiting = false
-personinput()
+PersonInput()
     
 }})
     
@@ -77,7 +78,7 @@ function changeboard(x,y){
     if (board[x][y]!=''){
         console.log("Err.UsedOrNotOption")
     }else{
-        board[x][y] = player
+        board[x][y] = me
     }
     printBoard()
 }
