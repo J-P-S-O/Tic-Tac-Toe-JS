@@ -10,7 +10,9 @@ let client = new net.Socket();
 client.on('data', function(data) {    
     console.log('Client received: ' + data);
 if (waiting){
-moves = data.split()
+data += ''
+let moves = data.split("")
+console.log(moves)
 board[moves[0]][moves[1]] = adv
 printBoard()
 check()
@@ -89,12 +91,13 @@ function PersonInput(){
     board[nput][nput2] = me
     printBoard()
     client.write(nput+nput2)
+    
     OutInput()
     check()
 }
 async function OutInput(){
     
-    let waiting = true
+    waiting = true
     
     };
     

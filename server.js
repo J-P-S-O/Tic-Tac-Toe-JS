@@ -10,7 +10,8 @@ let server = net.createServer((c) => {
 console.log(c)
     firstEmitter.on("send",(arg)=>{
         c.write(arg.content)
-	
+        waiting = true
+
 	
     }) 
     console.log("connecting"+c)
@@ -19,9 +20,9 @@ console.log(c)
     });
     c.on('data', (data)=>{
         if (waiting){
-data = data +'';
+        data = data +'';
 		changeboard((data.split(""))[0],(data.split(""))[1])
-waiting = false
+        waiting = false
 PersonInput()
     
 }})
@@ -78,7 +79,7 @@ function changeboard(x,y){
     if (board[x][y]!=''){
         console.log("Err.UsedOrNotOption")
     }else{
-        board[x][y] = me
+        board[x][y] = adv
     }
     printBoard()
 }

@@ -4,7 +4,7 @@
   "description": "tictactoe",
   "main": "tictactoe.js",
   "scripts": {
-    "test": "node server.js && node tictactoe.js && exit 0"
+    "test": "test"
   },
   "author": "JPSO",
   "license": "MIT",
