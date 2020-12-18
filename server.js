@@ -22,6 +22,7 @@ console.log(c)
         if (waiting){
         data = data +'';
 		changeboard((data.split(""))[0],(data.split(""))[1])
+	printBoard()
         waiting = false
 PersonInput()
     

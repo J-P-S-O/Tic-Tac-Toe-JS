@@ -9,6 +9,7 @@
   "author": "JPSO",
   "license": "MIT",
   "dependencies": {
+    "coffeescript": "^2.5.1",
     "events": "^3.2.0",
     "prompt-sync": "^4.2.0"
   }
