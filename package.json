@@ -4,13 +4,14 @@
   "description": "tictactoe",
   "main": "tictactoe.js",
   "scripts": {
-    "test": "npm i -g pkg && pkg server.js && pkg tictactoe.js"
+    "test": "npm i && tsc"
   },
   "author": "JPSO",
   "license": "MIT",
   "dependencies": {
     "coffeescript": "^2.5.1",
     "events": "^3.2.0",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "typescript": "^4.1.3"
   }
 }
