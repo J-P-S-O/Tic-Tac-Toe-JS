@@ -1,0 +1,13 @@
+{
+"compilerOptions": {
+  "module": "commonjs",
+  "noImplicitAny": false,
+  "removeComments": false,
+  "preserveConstEnums": true,
+  "sourceMap": false
+},
+"files": [
+  "tictactoe.ts",
+  "server.ts",
+  ]
+}
