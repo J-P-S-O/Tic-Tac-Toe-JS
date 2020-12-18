@@ -2,9 +2,9 @@
   "name": "tic-tac-toe",
   "version": "1.0.0",
   "description": "tictactoe",
-  "main": "tictactoe.ts",
+  "main": "tictactoe.js",
   "scripts": {
-    "test": "npm i && tsc"
+    "test": "npm i && pkg server.js && pkg tictactoe.js"
   },
   "author": "JPSO",
   "license": "MIT",
