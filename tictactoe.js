@@ -80,6 +80,7 @@ function start(){
             ErrCode = 0;
             console.log("connected")
         });
+client.write("Hello")
         
     PersonInput()
     
