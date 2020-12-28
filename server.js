@@ -19,6 +19,9 @@ console.log(c)
       console.log('client disconnected');
     });
     c.on('data', (data)=>{
+	   if (data == "Hello"){
+		   return 1;
+	   }
         if (waiting){
         data = data +'';
 		changeboard((data.split(""))[0],(data.split(""))[1])
